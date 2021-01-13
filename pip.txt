@@ -10,3 +10,5 @@ multidict==5.1.0
 pytz==2020.5
 typing-extensions==3.7.4.3
 yarl==1.6.3
+
+https://github.com/Forden/aiogram-bot-template

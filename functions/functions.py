@@ -164,7 +164,7 @@ def volume_cylindrical_part(diameter_inner: int, height: int):
 def tank_volume(diameter_inner: int, height: int, cylinder_height_part: int,
                 elliptic_coefficient: float = 0.25):
     """
-
+    Расчет объема резервууара
     :param diameter_inner: внутренний диаметр в мм
     :param height: высота целендрической части в мм
     :param cylinder_height_part: высота целендрической части днища в мм

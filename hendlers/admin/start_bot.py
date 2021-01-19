@@ -1,6 +1,10 @@
+import os
 from misc import bot
+from dotenv import load_dotenv
 
-from config import admin_id
+load_dotenv()
+
+admin_id = os.getenv("admin_id")
 
 
 async def send_to_admin(dp):

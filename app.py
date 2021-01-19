@@ -1,6 +1,7 @@
 from aiogram import executor
-from misc import dp, loop
+from misc import dp
 import hendlers
+
 
 if __name__ == '__main__':
 

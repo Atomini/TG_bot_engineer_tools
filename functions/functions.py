@@ -17,13 +17,15 @@ def input_data(string: str):
     возвращает список елементов.
     :param string: строчка принятая от пользователя в формате a+b+c+...+n
     :return:  возвращает список [a,b,c,...,n]
+    >>> input_data("100+200+600")
+    [100.0, 200.0, 600.0]
     """
-    plot_list: list = string.split("+")
+    plot_list = list(map(float, string.split("+")))
     return plot_list
 
 
 # ------------------------------- Блок расчета масси ---------------------------------------------------------------
-def weight_sheet(width: float, length: float, thickness: float, density: int = 7850, number_of_sheets: int = 1):
+def weight_sheet(width: float, length: float, thickness: float, number_of_sheets: int = 1, density: int = 7850):
     """
     Функция для  расчета масси листа
     :param width: длина листа в мм

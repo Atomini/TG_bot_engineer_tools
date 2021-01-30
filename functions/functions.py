@@ -40,9 +40,14 @@ def weight_sheet(width: float, length: float, thickness: float, number_of_sheets
     >>> weight_sheet(1000,1000,1000,2000,5)
     10.0
     """
-
-    weight: float = width / 1000 * length / 1000 * thickness / 1000 * density / 1000 * number_of_sheets
-    return round(weight, 3)
+    if number_of_sheets == 1:
+        weight: float = width / 1000 * length / 1000 * thickness / 1000 * density / 1000 * number_of_sheets
+        return "Масса листа {} тонны".format(round(weight, 3))
+    else:
+        one_weight: float = width / 1000 * length / 1000 * thickness / 1000 * density / 1000
+        weight: float = width / 1000 * length / 1000 * thickness / 1000 * density / 1000 * number_of_sheets
+        return "Масса одного листа {1} тонны \nМасса {2} листов {0} тонны".format(round(weight, 3),
+                                    round(one_weight, 3), int(number_of_sheets))
 
 
 def weight_cylinder(diameter: float, length: float, density: int = 7850):
@@ -59,7 +64,7 @@ def weight_cylinder(diameter: float, length: float, density: int = 7850):
     706.858
     """
     weight: float = (math.pi / 4) * (diameter / 1000) ** 2 * density * length / 1000
-    return round(weight, 3)
+    return "Масса круга диаметром {1}mm длиной {2}mm состовляет {0} кг".format(round(weight, 3), diameter, length)
 
 
 def weight_pipe(diameter: float, wall_thickness: float, length: float, density: int = 7850):
@@ -78,7 +83,8 @@ def weight_pipe(diameter: float, wall_thickness: float, length: float, density: 
     diameter_small = diameter - wall_thickness * 2
     weight: float = (math.pi / 4) * ((diameter / 1000) ** 2 - (diameter_small / 1000) ** 2) * length / 1000 * density
     weight_one_meter: float = weight / (length / 1000)
-    return round(weight, 2), round(weight_one_meter, 2)
+    return "Масса трубы {2}x{3} длиной {4} составляет {0} кг\nМасса одного метра составляет {1} кг".format(
+        round(weight, 2), round(weight_one_meter, 2), diameter, wall_thickness, length)
 
 
 def weight_gasket(diameter_outer: float, diameter_inner: float, length: float = 3, density: int = 2000):
@@ -96,7 +102,8 @@ def weight_gasket(diameter_outer: float, diameter_inner: float, length: float = 
     """
     weight: float = (math.pi / 4) * (
             (diameter_outer / 1000) ** 2 - (diameter_inner / 1000) ** 2) * length / 1000 * density
-    return round(weight, 4)
+    return "Масса прокладки {1}x{2}x{3} состовляет {0} кг".format(round(weight, 4), diameter_outer,
+                                                                  diameter_inner, length)
 
 
 # --------------------------------------------блок расчета геометрии --------------------------------------------------

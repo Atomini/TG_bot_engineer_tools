@@ -2,17 +2,18 @@ from aiogram import types
 from misc import dp, bot
 from keyboards.default import main_keyboards as kb
 
-#---------------------test-------------------------------------------------
+
 
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
 from functions.functions import *
+
+
 class Mydialog(StatesGroup):
-    otvet = State()  # Will be represented in storage as 'Mydialog:otvet'
-
-
-#-----------------------test-----------------------------------------------
-
+    sheet_otvet = State()  # Will be represented in storage as 'Mydialog:otvet'
+    cylinder_otvet = State()
+    gasket_otvet = State()
+    pipe_otvet = State()
 
 
 @dp.message_handler(commands=["start"])
@@ -29,25 +30,91 @@ async def mass_menu(message: types.Message):
     elif message.text == "Расчет геометрии":
         await bot.send_message(message.from_user.id, text="Меню геометрии", reply_markup=kb.geom_keyboard)
     elif message.text == "Масса листа":
-        # ----------------------------test------------------------------------------
-        await Mydialog.otvet.set()  # вот мы указали начало работы состояний (states)
-        # -----------------------------test-----------------------------------------
-        await bot.send_message(message.from_user.id, "ВВедите размеры листа в формате a+b+c") #TODO написать нормальное описание
+
+        await Mydialog.sheet_otvet.set()  # вот мы указали начало работы состояний (states)
+        await bot.send_message(message.from_user.id, "Введите данные для расчета в формате\n"
+                                                     "длина+ширина+толщина+количество листов+плотность\n"
+                                                     "<b>в милиметрах</b>\n"
+                                                     "количество листов и плотность вводить не обезательно\n"
+                                                     "по умолчанию количество листов = 1\n"
+                                                     "плотность = 7850 (сталь)\n")
+    elif message.text == "Масса круга":
+        await Mydialog.cylinder_otvet.set()
+        await bot.send_message(message.from_user.id, "Введите данные для расчета в формате\n"
+                                                     "диаметр+длина круга+плотность\n"
+                                                     "<b>в милиметрах</b>\n"
+                                                     "плотность вводить не обезательно\n"
+                                                     "по умолчанию плотность = 7850 (сталь)")
+    elif message.text == "Масса прокладки":
+        await Mydialog.gasket_otvet.set()
+        await bot.send_message(message.from_user.id, "Введите данные для расчета в формате\n"
+                                                     "наружный диаметр+внутрений диаметр+толщина+плотность\n"
+                                                     "<b>в милиметрах</b>\n"
+                                                     "плотность и толщину вводить не обезательно\n"
+                                                     "по умолчанию плотность = 2000 (паронит)\n"
+                                                     "толщина  = 3 мм")
+    elif message.text == "Масса трубы":
+        await Mydialog.pipe_otvet.set()
+        await bot.send_message(message.from_user.id, "Введите данные для расчета в формате\n"
+                                                     "Наружный диаметр+тощина стенки(через точку)"
+                                                     "+длина трубы+плотность\n"
+                                                     "<b>в милиметрах</b>\n"
+                                                     "плотность вводить не обезательно\n"
+                                                     "плотность = 7850 (сталь)\n")
 
 
-#---------------------------test-------------------------------------------
-@dp.message_handler(state=Mydialog.otvet)
-async def process_message(message: types.Message, state: FSMContext):
+@dp.message_handler(state=Mydialog.pipe_otvet)
+async def pipe_message(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['text'] = message.text
         user_message = data['text']
-        answer = input_data(user_message)
+        if user_message == "End":
+            await state.finish()
+        else:
+            answer = input_data(user_message)
+            final_answer = weight_pipe(*answer)
+            await bot.send_message(message.from_user.id, text="{}\nДля завершения наберите End".format(final_answer))
 
-        answer_1 = weight_sheet(*answer)
 
-        await bot.send_message(message.from_user.id, answer_1)
+@dp.message_handler(state=Mydialog.gasket_otvet)
+async def gasket_message(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['text'] = message.text
+        user_message = data['text']
+        if user_message == "End":
+            await state.finish()
+        else:
+            answer = input_data(user_message)
+            final_answer = weight_gasket(*answer)
+            await bot.send_message(message.from_user.id, text="{}\nДля завершения наберите End".format(final_answer))
 
+
+@dp.message_handler(state=Mydialog.cylinder_otvet)
+async def cylinder_message(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['text'] = message.text
+        user_message = data['text']
+        if user_message == "End":
+            await state.finish()
+        else:
+            answer = input_data(user_message)
+            final_answer = weight_cylinder(*answer)
+            await bot.send_message(message.from_user.id, text="{}\nДля завершения наберите End".format(final_answer))
+
+
+@dp.message_handler(state=Mydialog.sheet_otvet)
+async def sheet_message(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['text'] = message.text
+        user_message = data['text']
+        if user_message == "End":
+            await state.finish()
+        else:
+            answer = input_data(user_message)
+            final_answer = weight_sheet(*answer)
+
+            await bot.send_message(message.from_user.id, text="{}\nДля завершения наберите End".format(final_answer))
     # Finish conversation
-    await state.finish()  # закончили работать с сотояниями
+    # await state.finish()  # закончили работать с сотояниями
+            await Mydialog.sheet_otvet.set()
 
-#-----------------------------test-----------------------------------------

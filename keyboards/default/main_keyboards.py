@@ -23,7 +23,7 @@ mass_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=Fals
 
 # клавиатура  расчета геометрии
 button_sweep = KeyboardButton("Расчет развертки по средней линни")
-button_perimeter = KeyboardButton("Разчета длини развертки")
+button_perimeter = KeyboardButton("Разчет длини развертки по периметру")
 button_height = KeyboardButton("Висота цилендрической части")
 button_cylindric = KeyboardButton("Объем цилендрической части")
 button_tank = KeyboardButton("Объем резервууара")

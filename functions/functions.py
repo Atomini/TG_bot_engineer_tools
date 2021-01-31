@@ -47,7 +47,8 @@ def weight_sheet(width: float, length: float, thickness: float, number_of_sheets
         one_weight: float = width / 1000 * length / 1000 * thickness / 1000 * density / 1000
         weight: float = width / 1000 * length / 1000 * thickness / 1000 * density / 1000 * number_of_sheets
         return "Масса одного листа {1} тонны \nМасса {2} листов {0} тонны".format(round(weight, 3),
-                                    round(one_weight, 3), int(number_of_sheets))
+                                                                                  round(one_weight, 3),
+                                                                                  int(number_of_sheets))
 
 
 def weight_cylinder(diameter: float, length: float, density: int = 7850):
@@ -122,7 +123,7 @@ def cylinder_sweep(diameter_inner: int, wall_thickness: int):
     """
     average_diameter = diameter_inner + wall_thickness
     sweep = math.pi * average_diameter
-    return round(sweep)
+    return "Развертка по средней линни {} мм".format(round(sweep))
 
 
 def bottom_perimeter_sweep(perimeter: int, wall_thickness: int):
@@ -137,7 +138,7 @@ def bottom_perimeter_sweep(perimeter: int, wall_thickness: int):
     5058
     """
     sweep = perimeter - wall_thickness * math.pi
-    return round(sweep)
+    return "Длина развертки по наружному периметру {} мм".format(round(sweep))
 
 
 def height_cylindrical_part(diameter_inner: int, volume: float):
@@ -152,7 +153,7 @@ def height_cylindrical_part(diameter_inner: int, volume: float):
     12434
     """
     height = 4 * volume / (math.pi * (diameter_inner / 1000) ** 2)
-    return round(height * 1000)
+    return "Висота цилендрической части резервуара {} mm".format(round(height * 1000))
 
 
 def volume_cylindrical_part(diameter_inner: int, height: int):
@@ -167,7 +168,7 @@ def volume_cylindrical_part(diameter_inner: int, height: int):
     100
     """
     volume = (math.pi * (diameter_inner / 1000) ** 2 * height / 1000) / 4
-    return round(volume)
+    return "Объем цилендрической части {} м3".format(round(volume, 2))
 
 
 def tank_volume(diameter_inner: int, height: int, cylinder_height_part: int,
@@ -199,7 +200,7 @@ def tank_volume(diameter_inner: int, height: int, cylinder_height_part: int,
     volume_cylindrical = (math.pi * (diameter_inner / 1000) ** 2 * height / 1000) / 4
 
     result = bottom_volume * 2 + volume_cylindrical
-    return round(result, 2)
+    return "Объем резервууара {} м3".format(round(result, 2))
 
 
 # --------------------------------------------блок расчета днищь --------------------------------------------------
@@ -210,7 +211,7 @@ def calculation_bottom(diameter_inner: int, cylinder_height_part: int, wall_thic
     """
     Расчет параметров днища:
     f - площадь внутренней поверхности днища в м2
-    d - теоретический диаметр заготовки в м
+    d - теоретический диаметр заготовки в мм
     q - масса днища в кг
     v - объем днища в м3
     :param diameter_inner: внутренний диаметр в мм
@@ -237,7 +238,12 @@ def calculation_bottom(diameter_inner: int, cylinder_height_part: int, wall_thic
 
         v = math.pi / 4 * (diameter_inner / 1000) ** 2 * (cylinder_height_part / 1000 +
                                                           0.166 * diameter_inner / 1000)
-        return round(f, 2), round(d), round(q, 1), round(v, 3)
+        return "Площадь внутренней поверхности днища {0} м2\n" \
+               "Теоретический диаметр заготовки {1} мм\n" \
+               "Масса днища {2} кг\n" \
+               "Объем днища {3} м3\n" \
+               "коэффициент эллиптичности {4}".format(round(f, 2), round(d), round(q, 1), round(v, 3),
+                                                      elliptic_coefficient)
 
     elif elliptic_coefficient == 0.2:
         f = math.pi * diameter_inner / 1000 * (cylinder_height_part / 1000 + 0.318 * diameter_inner / 1000)
@@ -251,9 +257,14 @@ def calculation_bottom(diameter_inner: int, cylinder_height_part: int, wall_thic
         v = math.pi / 4 * (diameter_inner / 1000) ** 2 * (cylinder_height_part / 1000 +
                                                           0.133 * diameter_inner / 1000)
 
-        return round(f, 2), round(d), round(q, 1), round(v, 3)
+        return "Площадь внутренней поверхности днища {0} м2\n" \
+               "Теоретический диаметр заготовки {1} мм\n" \
+               "Масса днища {2} кг\n" \
+               "Объем днища {3} м3\n" \
+               "коэффициент эллиптичности {4}".format(round(f, 2), round(d), round(q, 1), round(v, 3),
+                                                      elliptic_coefficient)
     else:
-        return "введен неправельный коефициент елептичности"
+        return "Введен неправельный коефициент елептичности. Поробуйте снова"
 
 
 # -------------------------------------------блок снятия усиления шва ---------------------------------------

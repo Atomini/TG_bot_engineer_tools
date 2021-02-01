@@ -107,7 +107,17 @@ async def mass_menu(message: types.Message):
                                                      "<b>в милиметрах</b>\n"
                                                      "коефициент вводить не обезательно\n"
                                                      "по умолчанию коефициент елептичности = <b>0,25</b>")
-
+    elif message.text == "Таблица снятия усиления":
+        await bot.send_message(message.from_user.id, "1600\n" # TODO заполнить динними
+                                                     "1800\n"
+                                                     "2000\n"
+                                                     "2200\n"
+                                                     "2400\n"
+                                                     "2600\n"
+                                                     "2800\n"
+                                                     "3000\n"
+                                                     "3200\n"
+                                                     "3200(0.2)\n")
 
 @dp.message_handler(state=MyDialog.tank_volume_otvet)
 async def tank_volume_message(message: types.Message, state: FSMContext):

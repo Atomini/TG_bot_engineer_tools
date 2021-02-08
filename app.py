@@ -1,7 +1,7 @@
 from aiogram import executor
 from misc import dp
 import hendlers
-
+"""Точка входа"""
 
 if __name__ == '__main__':
 

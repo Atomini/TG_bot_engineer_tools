@@ -1,8 +1,6 @@
 import os
 from misc import bot
-from dotenv import load_dotenv
 
-load_dotenv()
 
 admin_id = os.getenv("admin_id")
 
